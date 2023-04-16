@@ -2,46 +2,41 @@ import React from "react";
 import { useState } from 'react'
 import { Quill } from "react-quill";
 import './QuillToolbar.css'
+const Embed = Quill.import('blots/block/embed');
 
-const CustomUndo = () => (
-    <svg viewBox="0 0 18 18">
-        <polygon className="ql-fill ql-stroke" points="6 10 4 12 2 10 6 10" />
-        <path
-            className="ql-stroke"
-            d="M8.09,13.91A4.6,4.6,0,0,0,9,14,5,5,0,1,0,4,9"
-        />
-    </svg>
-);
-
-const CustomRedo = () => (
-    <svg viewBox="0 0 18 18">
-        <polygon className="ql-fill ql-stroke" points="12 10 14 12 16 10 12 10" />
-        <path
-            className="ql-stroke"
-            d="M9.91,13.91A4.6,4.6,0,0,1,9,14a5,5,0,1,1,5-5"
-        />
-    </svg>
-);
-
-const CustomButton = () => (
-    <span>Subcribe</span>
-);
-
-
-// Undo and redo functions for Custom Toolbar
-function undoChange() {
-    this.quill.history.undo();
+class Hr extends Embed {
+    static create(value) {
+        let node = super.create(value);
+        // give it some margin
+        node.setAttribute('style', "height:0px; margin-top:10px; margin-bottom:10px;");
+        return node;
+    }
 }
 
-function redoChange() {
-    console.log('hello1')
-    this.quill.history.redo();
-}
+Hr.blotName = 'hr'; //now you can use .ql-hr classname in your toolbar
+Hr.className = 'ql-hr';
+Hr.tagName = 'hr';
 
 function addSubscribe() {
-    const delta = this.quill.clipboard.convert(`<a href="https://www.npmjs.com/package/react-quill">Subscribe</a>`)
+    // const delta = this.quill.clipboard.convert(`<a href="https://www.npmjs.com/package/react-quill">Subscribe</a>`)
 
-    this.quill.setContents(delta, 'silent')
+    // this.quill.setContents(delta, 'silent')
+    // var selection = this._quill.getSelection(true);
+    // console.log()
+    // var prev = this.quill.root.innerHTML
+    var range = this.quill.getSelection();
+    this.quill.updateContents();
+    this.quill.clipboard.dangerouslyPasteHTML(range.index + 1, '<a href="https://www.npmjs.com/package/react-quill">Subscribe</a> ');
+}
+
+function addLine() {
+    // const delta = this.quill.clipboard.convert(`<h1>hh</h1>`)
+
+    this.quill.updateContents()
+    var range = this.quill.getSelection();
+    this.quill.insertEmbed(range.index, "hr", "null")
+    // this.quill.clipboard.dangerouslyPasteHTML(range.index + 1, '<div style="height:0px; margin-top:10px; margin-bottom:10px;    "></div>');
+
 }
 
 function sayHello() {
@@ -52,6 +47,10 @@ function sayHello() {
 const Size = Quill.import("formats/size");
 Size.whitelist = ["extra-small", "small", "medium", "large"];
 Quill.register(Size, true);
+
+Quill.register({
+    'formats/hr': Hr
+});
 
 // Add fonts to whitelist and register them
 const Font = Quill.import("formats/font");
@@ -70,9 +69,8 @@ export const modules = {
     toolbar: {
         container: "#toolbar",
         handlers: {
-            undo: undoChange,
-            redo: redoChange,
-            button: addSubscribe,
+            subscribe: addSubscribe,
+            line: addLine,
         }
     },
     history: {
@@ -101,15 +99,21 @@ export const formats = [
     "link",
     "image",
     "color",
-    "code-block"
+    "code-block",
+    "hr"
 ];
 
 // Quill Toolbar component
 function QuillToolbar() {
-    const [isOpen, setIsOpen] = useState(false);
+    const [isOpen1, setIsOpen1] = useState(false);
+    const [isOpen2, setIsOpen2] = useState(false);
 
-    const toggleDropdown = () => {
-        setIsOpen(!isOpen);
+    const toggleDropdown1 = () => {
+        setIsOpen1(!isOpen1);
+    };
+
+    const toggleDropdown2 = () => {
+        setIsOpen2(!isOpen2);
     };
 
     return (
@@ -168,38 +172,47 @@ function QuillToolbar() {
                 <button className="ql-code-block" />
                 <button className="ql-clean" />
             </span>
-            <span className="ql-formats">
-                <button className="ql-undo">
-                    <CustomUndo />
-                </button>
-                <button className="ql-redo">
-                    <CustomRedo />
-                </button>
-            </span>
 
             <div className="ffff">
                 <span className="ql-formats menu">
-                    <button className="ql" onClick={toggleDropdown}>
+                    <button className="ql" onClick={toggleDropdown1}>
                         Menu
                     </button>
                 </span>
 
-                <span style={{ display: isOpen ? "block" : "none" }} className="ql-formats ff">
-                    <button className="ql-button" onClick={toggleDropdown}>
+                <span style={{ display: isOpen1 ? "block" : "none" }} className="ql-formats ff">
+                    <button className="ql-subscribe" onClick={toggleDropdown1}>
                         <span>Subscribe</span>
                     </button>
-                    <button className="ql-b" onClick={() => console.log("Option 2 clicked")}>
-                        Option 2
+                    <button className="ql-caption" onClick={toggleDropdown1}>
+                        Subscribe with Caption
                     </button>
-                    <button className="ql-c" onClick={() => console.log("Option 3 clicked")}>
-                        Option 3
+                    <button className="ql-custon" onClick={toggleDropdown1}>
+                        Custom button
                     </button>
                 </span>
             </div>
 
-            {/* <span className="ql-formats">
-                <Dropdown options={options} onChange={handleSelectChange} value="Subscribes" placeholder="Select an option" />
-            </span> */}
+            <div className="ffff">
+                <span className="ql-formats menu">
+                    <button className="ql" onClick={toggleDropdown2}>
+                        More
+                    </button>
+                </span>
+
+                <span style={{ display: isOpen2 ? "block" : "none" }} className="ql-formats ff">
+                    <button className="ql-line" onClick={toggleDropdown2}>
+                        <span>Add Line</span>
+                    </button>
+                    <button className="ql-caption" onClick={toggleDropdown2}>
+                        B
+                    </button>
+                    <button className="ql-custon" onClick={toggleDropdown2}>
+                        C
+                    </button>
+                </span>
+            </div>
+
         </div >
 
     );
