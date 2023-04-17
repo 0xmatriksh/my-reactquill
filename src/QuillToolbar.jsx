@@ -3,7 +3,25 @@ import { useState } from 'react'
 import { Quill } from "react-quill";
 import './QuillToolbar.css'
 const Embed = Quill.import('blots/block/embed');
+const Delta = Quill.import('delta');
+const Parchment = Quill.import('parchment');
 
+// Making non editable button
+// reference: https://stackoverflow.com/questions/39601992/how-to-add-a-non-editable-tag-to-content-in-quill-editor
+class MyButton extends Parchment.Embed {
+    static create(value) {
+        console.log(value)
+        const node = super.create(value.label);
+        node.innerHTML = `<div><a href="${value.link}">${value.label}</a><div>`;
+        node.contentEditable = 'false';
+        return node;
+    }
+}
+MyButton.blotName = 'mybutton';
+MyButton.tagName = 'BTN';
+MyButton.className = 'ql-mybutton';
+
+// Adding Horizontal line
 class Hr extends Embed {
     static create(value) {
         let node = super.create(value);
@@ -14,43 +32,39 @@ class Hr extends Embed {
 }
 
 Hr.blotName = 'hr'; //now you can use .ql-hr classname in your toolbar
-Hr.className = 'ql-hr';
+// Hr.className = 'ql-hr';
 Hr.tagName = 'hr';
 
 function addSubscribe() {
-    // const delta = this.quill.clipboard.convert(`<a href="https://www.npmjs.com/package/react-quill">Subscribe</a>`)
-
-    // this.quill.setContents(delta, 'silent')
-    // var selection = this._quill.getSelection(true);
-    // console.log()
-    // var prev = this.quill.root.innerHTML
     var range = this.quill.getSelection();
-    this.quill.updateContents();
+    this.quill.updateContents(
+        new Delta()
+            .retain(range.index + 1)
+            .insert({ mybutton: { "link": "https://www.google.com", "label": "Subscribe" } })
+    );
+    this.quill.insertText(range.index + 2, "\n")
+}
+
+function addCustomButtom() {
+    var range = this.quill.getSelection();
     this.quill.clipboard.dangerouslyPasteHTML(range.index + 1, '<a href="https://www.npmjs.com/package/react-quill">Subscribe</a> ');
 }
 
 function addLine() {
-    // const delta = this.quill.clipboard.convert(`<h1>hh</h1>`)
-
-    this.quill.updateContents()
     var range = this.quill.getSelection();
     this.quill.insertEmbed(range.index, "hr", "null")
-    // this.quill.clipboard.dangerouslyPasteHTML(range.index + 1, '<div style="height:0px; margin-top:10px; margin-bottom:10px;    "></div>');
-
 }
 
-function sayHello() {
-    alert('Hello!');
-}
+Quill.register(MyButton);
+
+Quill.register({
+    'formats/hr': Hr
+});
 
 // Add sizes to whitelist and register them
 const Size = Quill.import("formats/size");
 Size.whitelist = ["extra-small", "small", "medium", "large"];
 Quill.register(Size, true);
-
-Quill.register({
-    'formats/hr': Hr
-});
 
 // Add fonts to whitelist and register them
 const Font = Quill.import("formats/font");
@@ -70,6 +84,7 @@ export const modules = {
         container: "#toolbar",
         handlers: {
             subscribe: addSubscribe,
+            custom: addCustomButtom,
             line: addLine,
         }
     },
@@ -100,7 +115,8 @@ export const formats = [
     "image",
     "color",
     "code-block",
-    "hr"
+    "hr",
+    "mybutton"
 ];
 
 // Quill Toolbar component
@@ -133,7 +149,7 @@ function QuillToolbar() {
                     <option value="medium">Size 3</option>
                     <option value="large">Size 4</option>
                 </select>
-                <select onChange={sayHello} className="ql-header" defaultValue="3">
+                <select className="ql-header" defaultValue="3">
                     <option value="1">Heading</option>
                     <option value="2">Subheading</option>
                     <option value="3">Normal</option>
@@ -187,7 +203,7 @@ function QuillToolbar() {
                     <button className="ql-caption" onClick={toggleDropdown1}>
                         Subscribe with Caption
                     </button>
-                    <button className="ql-custon" onClick={toggleDropdown1}>
+                    <button className="ql-custom" onClick={toggleDropdown1}>
                         Custom button
                     </button>
                 </span>
