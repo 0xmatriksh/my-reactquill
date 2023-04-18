@@ -222,7 +222,7 @@ function QuillToolbar() {
                 <button className="ql-clean" />
             </span>
 
-            <div className="ffff">
+            <div className="dropdown">
                 <span className="ql-formats menu">
                     <button className="ql" onClick={toggleDropdown1}>
                         Menu
@@ -245,7 +245,7 @@ function QuillToolbar() {
                 </span>
             </div>
 
-            <div className="ffff">
+            <div className="dropdown">
                 <span className="ql-formats menu">
                     <button className="ql" onClick={toggleDropdown2}>
                         More

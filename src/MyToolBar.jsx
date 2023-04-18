@@ -23,12 +23,6 @@ function QuillToolbar() {
                     <option value="helvetica">Helvetica</option>
                     <option value="lucida">Lucida</option>
                 </select>
-                <select className="ql-size" defaultValue="medium">
-                    <option value="extra-small">Size 1</option>
-                    <option value="small">Size 2</option>
-                    <option value="medium">Size 3</option>
-                    <option value="large">Size 4</option>
-                </select>
                 <select className="ql-header" defaultValue="3">
                     <option value="1">Heading</option>
                     <option value="2">Subheading</option>
@@ -40,43 +34,28 @@ function QuillToolbar() {
                 <button className="ql-italic" />
                 <button className="ql-underline" />
                 <button className="ql-strike" />
-            </span>
-            <span className="ql-formats">
-                <button className="ql-list" value="ordered" />
-                <button className="ql-list" value="bullet" />
-                <button className="ql-indent" value="-1" />
-                <button className="ql-indent" value="+1" />
-            </span>
-            <span className="ql-formats">
-                <button className="ql-script" value="super" />
-                <button className="ql-script" value="sub" />
-                <button className="ql-blockquote" />
-                <button className="ql-direction" />
-            </span>
-            <span className="ql-formats">
-                <select className="ql-align" />
-                <select className="ql-color" />
-                <select className="ql-background" />
+                <button className="ql-code-block" />
             </span>
             <span className="ql-formats">
                 <button className="ql-link" />
                 <button className="ql-image" />
                 <button className="ql-video" />
+                <button className="ql-blockquote" />
             </span>
             <span className="ql-formats">
-                <button className="ql-formula" />
-                <button className="ql-code-block" />
-                <button className="ql-clean" />
+                <button className="ql-list" value="bullet" />
+                <button className="ql-list" value="ordered" />
             </span>
-
-            <div className="ffff">
+            <div className="dropdown">
                 <span className="ql-formats menu">
-                    <button className="ql" onClick={toggleDropdown1}>
-                        Menu
+                    <button className="menuBtn" onClick={toggleDropdown1}>
+                        <span>Buttons</span>
+                        <span><svg className="svgBtn" viewBox="0 0 22 22"> <polygon class="ql-stroke" points="7 11 9 13 11 11 7 11"></polygon> </svg> </span>
                     </button>
+
                 </span>
 
-                <span style={{ display: isOpen1 ? "block" : "none" }} className="ql-formats ff">
+                <span style={{ display: isOpen1 ? "block" : "none" }} className="ql-formats items">
                     <button className="ql-subscribe" onClick={toggleDropdown1}>
                         <span>Subscribe</span>
                     </button>
@@ -92,22 +71,16 @@ function QuillToolbar() {
                 </span>
             </div>
 
-            <div className="ffff">
+            <div className="dropdown">
                 <span className="ql-formats menu">
-                    <button className="ql" onClick={toggleDropdown2}>
+                    <button className="menuBtn" onClick={toggleDropdown2}>
                         More
                     </button>
                 </span>
 
-                <span style={{ display: isOpen2 ? "block" : "none" }} className="ql-formats ff">
+                <span style={{ display: isOpen2 ? "block" : "none" }} className="ql-formats items">
                     <button className="ql-line" onClick={toggleDropdown2}>
                         <span>Add Line</span>
-                    </button>
-                    <button className="ql-caption" onClick={toggleDropdown2}>
-                        B
-                    </button>
-                    <button className="ql-custon" onClick={toggleDropdown2}>
-                        C
                     </button>
                 </span>
             </div>
