@@ -3,6 +3,8 @@ import './App.css';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import QuillToolbar, { modules, formats } from "./QuillToolbar";
+import Editor from './Editor';
+import FuncEditor from './FuncEditor';
 
 function App() {
   const [value, setValue] = useState('');
@@ -10,9 +12,10 @@ function App() {
   const handleChange = value => {
     setValue(value);
   };
+
   return (
     <div className="App">
-      <QuillToolbar />
+      {/* <QuillToolbar />
       <ReactQuill
         theme="snow"
         value={value}
@@ -20,7 +23,8 @@ function App() {
         placeholder={"Write something awesome..."}
         modules={modules}
         formats={formats}
-      />
+      /> */}
+      <Editor />
     </div>
   )
 }

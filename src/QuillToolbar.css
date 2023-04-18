@@ -23,9 +23,22 @@
     text-align: center;
 } */
 
-.ql-editor a {
+.w-caption {
+    width: 50%;
+    margin: 0 auto;
+    border: 1px solid black;
+    padding: 10px;
+}
+
+.sub-div {
+    font-size: 20px;
+    margin: 10px;
+}
+
+.sub-div a {
+    margin-top: 5px;
+    margin-bottom: 5px;
     color: white;
-    background-color: #4ED96F;
     text-align: center;
     font-weight: 600;
     padding: 6px !important;
@@ -40,7 +53,8 @@
 }
 
 .ff {
-    width: 150px !important;
+    font-size: 14px;
+    width: 180px !important;
     background-color: white;
     padding: 10px !important;
     border: 1px solid black;
