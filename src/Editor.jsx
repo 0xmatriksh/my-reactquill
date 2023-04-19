@@ -152,7 +152,8 @@ class Editor extends React.Component {
         "image",
         "color",
         "mybutton",
-        "hr"
+        "hr",
+        "code-block"
     ];
 
     render() {
